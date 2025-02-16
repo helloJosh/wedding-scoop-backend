@@ -22,7 +22,7 @@ jobs:
           cache: maven
 
       - name: build script execute
-        run: ./build.sh
+        run: sudo ./build.sh
 
       - name: Delete file in server
         run: sudo rm -rf /home/ubuntu/scoop-backend
