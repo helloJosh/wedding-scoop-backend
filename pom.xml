@@ -60,7 +60,6 @@
     </dependencyManagement>
 
     <build>
-        <finalName>scoop</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

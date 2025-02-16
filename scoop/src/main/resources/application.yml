@@ -22,7 +22,7 @@ spring:
       max-request-size: 10MB
 
   profiles:
-    active: local
+    active: dev
   lifecycle:
     timeout-per-shutdown-phase: 30s
   application:
