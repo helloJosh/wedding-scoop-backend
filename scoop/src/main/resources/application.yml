@@ -1,0 +1,45 @@
+spring:
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+
+  jpa:
+    open-in-view: false
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        highlight_sql: true
+        auto_quote_keyword: true
+        hbm2ddl:
+          auto: create
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  profiles:
+    active: local
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+  application:
+    name: scoop
+
+server:
+  shutdown: graceful
+  port: 8081
+
+logging:
+  level:
+    org.hibernate.orm.jdbc.bind: trace
+    org.springframework.transaction.interceptor: trace
+
+springdoc:
+  swagger-ui:
+    url: /docs/openapi-3.0.json
+    path: /bookstore/docs/swagger
+
+

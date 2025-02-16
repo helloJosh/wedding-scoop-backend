@@ -1,0 +1,21 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    db-url: jdbc:postgresql://localhost:5432/postgres
+    username: root
+    password: 123456789
+    driver-class-name: org.postgresql.Driver
+    dbcp2:
+      initial-size: 10               # 초기 연결 수
+      max-total: 50                  # 최대 커넥션 수
+      max-idle: 30                   # 최대 유휴 커넥션 수
+      min-idle: 5                    # 최소 유휴 커넥션 수
+      max-wait-millis: 10000         # 커넥션 풀에서 커넥션을 가져오기 위해 기다리는 최대 시간 (ms)
+      validation-query: SELECT 1     # 커넥션 유효성 검사 쿼리
+      test-on-borrow: true           # 대여 시 유효성 검사
+      test-while-idle: true          # 유휴 상태일 때 검사
+      time-between-eviction-runs-millis: 5000  # 유휴 커넥션 검사 주기
+      min-evictable-idle-time-millis: 60000    # 유휴 커넥션 최소 유지 시간
