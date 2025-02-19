@@ -30,7 +30,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-
       - name: Build and Push Docker Images
         run: |
           services=("auth" "scoop")
@@ -38,7 +37,7 @@ jobs:
             echo "Building and pushing Docker image for $service"
             if [ -f "./$service/docker/Dockerfile" ]; then
               docker buildx build --push \
-                --tag ${{ secrets.DOCKERHUB_USERNAME }}/${service}-api:latest \
+                --tag ${{ secrets.DOCKER_USERNAME }}/${service}-api:latest \
                 -f ./$service/docker/Dockerfile \
                 ./$service/docker
           
@@ -61,11 +60,11 @@ jobs:
             docker rm $service-api || true
             
             # 최신 Docker 이미지 가져오기
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${service}-api:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${service}-api:latest
             
             # 새 컨테이너 실행
             docker run -d --name $service-api \
             -p 8080:8080 \
             --restart always \
-            ${{ secrets.DOCKERHUB_USERNAME }}/${service}-api:latest
+            ${{ secrets.DOCKER_USERNAME }}/${service}-api:latest
             done
