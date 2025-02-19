@@ -64,7 +64,7 @@ jobs:
           host: ${{ secrets.SERVER_HOSTNAME }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
+          port: ${{ secrets.SSH_PORT }}
           script: |
             services=("auth" "scoop")
             # 기존 컨테이너 중지 및 삭제
