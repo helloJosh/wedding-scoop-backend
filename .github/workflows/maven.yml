@@ -30,17 +30,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Debug Current Directory
-        run: |
-          echo "Current working directory:"
-          pwd  # 현재 디렉토리 출력
-          echo "List of files and folders:"
-          cd auth
-          ls -al  # 현재 디렉토리 내부 목록 출력
-          cd ..
-          cd scoop
-          ls -al
-
       - name: Build and Push Docker Images
         run: |
           services=("auth" "scoop")
@@ -66,29 +55,28 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             # 기존 컨테이너 중지 및 삭제
-            docker stop auth || true
-            docker rm auth || true
+            sudo docker stop auth || true
+            sudo docker rm auth || true
         
             # 최신 Docker 이미지 가져오기
-            docker pull ${{ secrets.DOCKER_USERNAME }}/auth-api:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/auth-api:latest
             
             # 새 컨테이너 실행
-            docker run -d --name $service-api \
+            sudo docker run -d --name $service-api \
             -p 8080:8080 \
             --restart always \
             ${{ secrets.DOCKER_USERNAME }}/auth-api:latest
             
             # 기존 컨테이너 중지 및 삭제
-            docker stop scoop || true
-            docker rm scoop || true
+            sudo docker stop scoop || true
+            sudo docker rm scoop || true
             
             # 최신 Docker 이미지 가져오기
-            docker pull ${{ secrets.DOCKER_USERNAME }}/scoop-api:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/scoop-api:latest
             
             # 새 컨테이너 실행
-            docker run -d --name $service-api \
+            sudo docker run -d --name $service-api \
             -p 8081:8081 \
             --restart always \
             ${{ secrets.DOCKER_USERNAME }}/scoop-api:latest
-            done
 
