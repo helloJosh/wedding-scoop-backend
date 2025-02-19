@@ -30,6 +30,13 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Debug Current Directory
+        run: |
+          echo "Current working directory:"
+          pwd  # 현재 디렉토리 출력
+          echo "List of files and folders:"
+          ls -al  # 현재 디렉토리 내부 목록 출력
+
       - name: Build and Push Docker Images
         run: |
           services=("auth" "scoop")
