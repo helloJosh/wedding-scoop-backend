@@ -35,7 +35,11 @@ jobs:
           echo "Current working directory:"
           pwd  # 현재 디렉토리 출력
           echo "List of files and folders:"
+          cd auth
           ls -al  # 현재 디렉토리 내부 목록 출력
+          cd ..
+          cd scoop
+          ls -al
 
       - name: Build and Push Docker Images
         run: |
