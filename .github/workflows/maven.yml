@@ -47,6 +47,7 @@ jobs:
           for service in "${services[@]}"; do
             echo "Building and pushing Docker image for $service"
             if [ -f "./$service/docker/Dockerfile" ]; then
+              mv ./${service}/target ./$service/docker
               docker buildx build --push \
                 --tag ${{ secrets.DOCKER_USERNAME }}/${service}-api:latest \
                 -f ./$service/docker/Dockerfile \
