@@ -52,7 +52,6 @@ jobs:
                 --tag ${{ secrets.DOCKER_USERNAME }}/${service}-api:latest \
                 -f ./$service/docker/Dockerfile \
                 ./$service/docker
-          
             else
               echo "Dockerfile not found for $service. Skipping..."
             fi
@@ -70,7 +69,7 @@ jobs:
             # 기존 컨테이너 중지 및 삭제
             docker stop $service-api || true
             docker rm $service-api || true
-            
+        
             # 최신 Docker 이미지 가져오기
             docker pull ${{ secrets.DOCKER_USERNAME }}/${service}-api:latest
             
