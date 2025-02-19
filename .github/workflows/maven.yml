@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Java CI/CD with Maven and Docker
 
 on:
   push:
@@ -9,11 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
@@ -21,41 +18,53 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: build script execute
-        run: sudo bash ./build.sh
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
 
-      - name: Delete file in server
-        run: sudo rm -rf /home/ubuntu/scoop-backend
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Copy files to server
-        uses: appleboy/scp-action@master
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          host: ${{ secrets.SSH_HOSTNAME }}
-          username: ${{ secrets.SSH_USER }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and Push Docker Images
+        run: |
+          services=("auth" "scoop")
+          for service in "${services[@]}"; do
+            echo "Building and pushing Docker image for $service"
+            if [ -f "./$service/docker/Dockerfile" ]; then
+              docker buildx build --push \
+                --tag ${{ secrets.DOCKERHUB_USERNAME }}/${service}-api:latest \
+                -f ./$service/docker/Dockerfile \
+                ./$service/docker
+          
+            else
+              echo "Dockerfile not found for $service. Skipping..."
+            fi
+          done
+
+      - name: Deploy to Remote Server
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOSTNAME }}
+          username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          source: "./ztarget"
-          target: "/home/ubuntu/scoop-backend"
-
-      - name: Deploy to server via SSH
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_IP }}
-          username: ${{ secrets.SSH_ID }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /home/ubuntu/scoop-backend/auth
-
-            sudo docker stop auth || true
-            sudo docker rm auth || true
-            sudo docker build -t auth .
-            sudo docker run -d -p 8080:8080 --name auth
-
-            cd /home/ubuntu/scoop-backend/scoop
+            services=("auth" "scoop")
+            # 기존 컨테이너 중지 및 삭제
+            docker stop $service-api || true
+            docker rm $service-api || true
             
-            sudo docker stop scoop || true
-            sudo docker rm scoop || true
-            sudo docker build -t scoop .
-            sudo docker run -d -p 8081:8081 --name scoop
-
+            # 최신 Docker 이미지 가져오기
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${service}-api:latest
+            
+            # 새 컨테이너 실행
+            docker run -d --name $service-api \
+            -p 8080:8080 \
+            --restart always \
+            ${{ secrets.DOCKERHUB_USERNAME }}/${service}-api:latest
+            done
