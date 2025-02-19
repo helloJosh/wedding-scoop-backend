@@ -60,22 +60,35 @@ jobs:
       - name: Deploy to Remote Server
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: ${{ secrets.SERVER_HOSTNAME }}
+          host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            services=("auth" "scoop")
             # 기존 컨테이너 중지 및 삭제
-            docker stop $service-api || true
-            docker rm $service-api || true
+            docker stop auth || true
+            docker rm auth || true
         
             # 최신 Docker 이미지 가져오기
-            docker pull ${{ secrets.DOCKER_USERNAME }}/${service}-api:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/auth-api:latest
             
             # 새 컨테이너 실행
             docker run -d --name $service-api \
             -p 8080:8080 \
             --restart always \
-            ${{ secrets.DOCKER_USERNAME }}/${service}-api:latest
+            ${{ secrets.DOCKER_USERNAME }}/auth-api:latest
+            
+            # 기존 컨테이너 중지 및 삭제
+            docker stop scoop || true
+            docker rm scoop || true
+            
+            # 최신 Docker 이미지 가져오기
+            docker pull ${{ secrets.DOCKER_USERNAME }}/scoop-api:latest
+            
+            # 새 컨테이너 실행
+            docker run -d --name $service-api \
+            -p 8081:8081 \
+            --restart always \
+            ${{ secrets.DOCKER_USERNAME }}/scoop-api:latest
             done
+
