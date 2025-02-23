@@ -6,6 +6,8 @@ import com.wedding.scoop.domain.member.dto.request.PostSignInRequest;
 import com.wedding.scoop.domain.member.dto.response.GetValidationResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/v1/api/member")
@@ -23,12 +25,14 @@ public interface MemberController {
             description = "로그인 요청 API "
     )
     @PostMapping("/login")
-    ApiResponse<PostLoginRequest> login();
+    ApiResponse<Void> login(@Valid @RequestBody PostLoginRequest postLoginRequest,
+                                        BindingResult bindingResult);
 
     @Operation(
             summary = "중복확인 API",
             description = "테스트 API."
     )
     @PostMapping("/signIn")
-    ApiResponse<PostSignInRequest> signIn();
+    ApiResponse<Void> signIn(@Valid @RequestBody PostSignInRequest postSignInRequest,
+                             BindingResult bindingResult);
 }

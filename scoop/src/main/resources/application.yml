@@ -14,7 +14,7 @@ spring:
         highlight_sql: true
         auto_quote_keyword: true
         hbm2ddl:
-          auto: create
+          auto: update
 
   servlet:
     multipart:
@@ -30,7 +30,7 @@ spring:
 
 server:
   shutdown: graceful
-  port: 8081
+  port: 30305
 
 logging:
   level:
@@ -39,7 +39,6 @@ logging:
 
 springdoc:
   swagger-ui:
-    url: /docs/openapi-3.0.json
-    path: /bookstore/docs/swagger
+    path: /docs
 
 

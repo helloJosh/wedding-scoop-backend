@@ -6,6 +6,7 @@ import com.wedding.scoop.domain.member.dto.request.PostSignInRequest;
 import com.wedding.scoop.domain.member.dto.response.GetValidationResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -14,17 +15,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberControllerImpl implements MemberController{
     @Override
     public ApiResponse<GetValidationResponse> duplicationCheck() {
-        GetValidationResponse response = new GetValidationResponse(true, "testestsetset");
-        return ApiResponse.success(response, "check duplication success");
+
+        return ApiResponse.success(new GetValidationResponse(true, "testestsetset"), "check duplication success");
     }
 
     @Override
-    public ApiResponse<PostLoginRequest> login() {
+    public ApiResponse<Void> signIn(PostSignInRequest postSignInRequest, BindingResult bindingResult) {
         return ApiResponse.success("login success");
     }
 
     @Override
-    public ApiResponse<PostSignInRequest> signIn() {
+    public ApiResponse<Void> login(PostLoginRequest postLoginRequest, BindingResult bindingResult) {
         return ApiResponse.success("sign in success");
     }
 }

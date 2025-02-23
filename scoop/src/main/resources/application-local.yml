@@ -20,12 +20,4 @@ spring:
       time-between-eviction-runs-millis: 5000  # 유휴 커넥션 검사 주기
       min-evictable-idle-time-millis: 60000    # 유휴 커넥션 최소 유지 시간
 
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
-        show_sql: true
-        hbm2ddl.auto: create
 
