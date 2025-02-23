@@ -77,7 +77,7 @@ jobs:
                   
                   # 새 scoop-api 컨테이너 실행
                   sudo docker run -d --name scoop-api \
-                  -p 8081:8081 \
+                  -p 30305:30305 \
                   --restart always \
                   ${{ secrets.DOCKER_USERNAME }}/scoop-api
 
