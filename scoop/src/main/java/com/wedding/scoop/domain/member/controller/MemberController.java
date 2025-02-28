@@ -37,5 +37,6 @@ public interface MemberController {
     )
     @PostMapping("/signIn")
     ApiResponse<Void> signIn(@Valid @RequestBody PostSignInRequest postSignInRequest,
-                             BindingResult bindingResult);
+                             BindingResult bindingResult,
+                             @RequestHeader("Authorization") String jwtToken);
 }

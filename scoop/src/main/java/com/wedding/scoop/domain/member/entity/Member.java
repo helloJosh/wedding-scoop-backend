@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
@@ -21,11 +22,13 @@ public class Member {
     @GeneratedValue
     private String id;
 
-    @Column(length = 10)
+    @Column(length = 100)
+    @Setter
     private String name;
 
     private String email;
-    private Integer age;
+    @Setter
+    private String ageRange;
 
     private Role role;
     private LocalDateTime expectedWeddingDate;
