@@ -23,10 +23,9 @@ public class JwtTokenProvider {
     private final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 1; //1시간
 
     // JWT 토큰 생성
-    public String generateAccessToken(String loginId, List<String> roles) {
+    public String generateAccessToken(String memberId) {
         String accessToken = Jwts.builder()
-                .subject(loginId)
-                .claim("roles", roles)
+                .subject(memberId)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRE_TIME))
                 .signWith(accessTokenKey)
@@ -53,7 +52,7 @@ public class JwtTokenProvider {
         }
     }
 
-    public String getLoginId(String accessToken){
+    public String getMemberId(String accessToken){
         try {
             return Jwts.parser()
                     .verifyWith(accessTokenKey).build()
@@ -67,19 +66,4 @@ public class JwtTokenProvider {
         }
     }
 
-    public List<SimpleGrantedAuthority> getRole(String accessToken){
-        try {
-            List<String> roles = (List<String>) Jwts.parser()
-                    .verifyWith(accessTokenKey).build()
-                    .parseSignedClaims(accessToken)
-                    .getPayload()
-                    .get("roles");
-
-            return roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-        } catch (ExpiredJwtException e) {
-            throw new JwtExpiredException("Token Expired");
-        } catch (JwtException e) {
-            throw new JwtNotValidException("Token Not Valid");
-        }
-    }
 }

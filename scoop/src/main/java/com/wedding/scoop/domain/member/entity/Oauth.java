@@ -20,4 +20,8 @@ public class Oauth {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    public Oauth(String name) {
+        this.name = name;
+    }
 }

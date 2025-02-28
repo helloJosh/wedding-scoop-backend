@@ -2,6 +2,9 @@ package com.wedding.scoop.domain.member.entity;
 
 import com.wedding.scoop.domain.member.entity.enums.Role;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
@@ -9,8 +12,10 @@ import org.hibernate.annotations.UuidGenerator;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Member {
-
     @Id
     @UuidGenerator
     @GeneratedValue
@@ -36,4 +41,10 @@ public class Member {
 
     @ManyToOne
     private Oauth oauth;
+
+    public Member(String email, String name, Oauth oauth) {
+        this.email = email;
+        this.name = name;
+        this.oauth = oauth;
+    }
 }

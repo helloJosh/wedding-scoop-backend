@@ -5,5 +5,6 @@ import lombok.Data;
 @Data
 public class PostLoginRequest {
     private String oauthCode;
+    private String redirectUri;
     private String provider;
 }
