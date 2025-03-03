@@ -1,18 +1,12 @@
-package com.wedding.scoop.domain.member.entity;
+package com.wedding.auth.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
 public class AuthMember {
     @Id
     @GeneratedValue
@@ -24,9 +18,4 @@ public class AuthMember {
 
     @ManyToOne
     private Auth auth;
-
-    public AuthMember(Member member, Auth auth) {
-        this.member = member;
-        this.auth = auth;
-    }
 }
