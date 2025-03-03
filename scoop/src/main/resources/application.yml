@@ -1,8 +1,8 @@
 spring:
-#  security:
-#    user:
-#      name: admin
-#      password: 1234
+  security:
+    user:
+      name: admin
+      password: 1234
   data:
     elasticsearch:
       repositories:
