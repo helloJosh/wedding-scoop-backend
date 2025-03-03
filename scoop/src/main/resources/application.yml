@@ -1,4 +1,8 @@
 spring:
+#  security:
+#    user:
+#      name: admin
+#      password: 1234
   data:
     elasticsearch:
       repositories:
@@ -40,5 +44,4 @@ logging:
 springdoc:
   swagger-ui:
     path: /docs
-
 

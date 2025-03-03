@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "kakaoOAuthClient")
+@FeignClient(name = "kakaoOAuthClient", url = "https://")
 public interface KakaoOAuthFeignClient {
-    @PostMapping(value = "https://kauth.kakao.com/oauth/token", consumes = "application/x-www-form-urlencoded")
+    @PostMapping(value = "kauth.kakao.com/oauth/token", consumes = "application/x-www-form-urlencoded")
     KakaoTokenResponse getAccessToken(
             @RequestParam("grant_type") String grantType,
             @RequestParam("client_id") String clientId,
@@ -18,6 +18,6 @@ public interface KakaoOAuthFeignClient {
             @RequestParam("code") String authorizationCode
     );
 
-    @GetMapping("https://kapi.kakao.com/v2/user/me")
+    @GetMapping("kapi.kakao.com/v2/user/me")
     KakaoUserInfoResponse getUserInfo(@RequestHeader("Authorization") String authorization);
 }

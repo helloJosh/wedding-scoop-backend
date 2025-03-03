@@ -8,6 +8,7 @@ spring:
     username: root
     password: 123456789
     driver-class-name: org.postgresql.Driver
+    type: org.apache.commons.dbcp2.BasicDataSource
     dbcp2:
       initial-size: 10               # 초기 연결 수
       max-total: 50                  # 최대 커넥션 수
