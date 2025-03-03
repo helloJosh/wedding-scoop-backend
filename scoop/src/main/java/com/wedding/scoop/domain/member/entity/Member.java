@@ -24,6 +24,10 @@ public class Member {
 
     @Column(length = 100)
     @Setter
+    private String nickname;
+
+    @Column(length = 100)
+    @Setter
     private String name;
 
     private String email;

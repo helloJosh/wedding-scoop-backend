@@ -20,7 +20,7 @@ public interface MemberController {
             description = "요청한 별명을 중복 검사후 추천 이름 반환"
     )
     @GetMapping("/validation")
-    ApiResponse<GetValidationResponse> duplicationCheck();
+    ApiResponse<GetValidationResponse> duplicationCheck(@RequestParam("nickname") String nickname);
 
     @Operation(
             summary = " 첫 회원가입, 로그인 API",

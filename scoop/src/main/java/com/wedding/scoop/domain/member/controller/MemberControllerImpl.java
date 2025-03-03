@@ -7,6 +7,7 @@ import com.wedding.scoop.domain.member.dto.response.GetValidationResponse;
 import com.wedding.scoop.domain.member.entity.Member;
 import com.wedding.scoop.domain.member.repository.MemberRepository;
 import com.wedding.scoop.domain.member.service.MemberService;
+import com.wedding.scoop.domain.member.service.ValidationService;
 import com.wedding.scoop.support.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,11 +24,12 @@ public class MemberControllerImpl implements MemberController{
     private final MemberService memberService;
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
+    private final ValidationService validationService;
 
     @Override
-    public ApiResponse<GetValidationResponse> duplicationCheck() {
+    public ApiResponse<GetValidationResponse> duplicationCheck(String nickname) {
 
-        return ApiResponse.success(new GetValidationResponse(true, "testestsetset"), "check duplication success");
+        return ApiResponse.success(validationService.validate(nickname), "check duplication success");
     }
 
     @Override
