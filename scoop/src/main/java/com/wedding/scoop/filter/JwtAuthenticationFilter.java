@@ -5,6 +5,7 @@ import com.wedding.scoop.domain.member.entity.Member;
 import com.wedding.scoop.domain.member.repository.AuthMemberRepository;
 import com.wedding.scoop.domain.member.repository.AuthRepository;
 import com.wedding.scoop.domain.member.repository.MemberRepository;
+import com.wedding.scoop.exception.notfound.MemberNotFoundException;
 import com.wedding.scoop.support.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -44,7 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String memberId = jwtTokenProvider.getMemberId(token);
 
             Member member = memberRepository.findById(memberId).orElseThrow(
-                    () -> new RuntimeException("no member found")
+                    () -> new MemberNotFoundException(memberId + "not member found")
             );
 
             List<GrantedAuthority> authorities = authMemberRepository.findAuthMembersByMember(member)

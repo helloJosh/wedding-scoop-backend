@@ -27,6 +27,7 @@ public class Member {
     private String name;
 
     private String email;
+    private String uuid;
     @Setter
     private String ageRange;
 
@@ -39,6 +40,7 @@ public class Member {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @Setter
     private LocalDateTime latestLoginAt;
     private Boolean active = Boolean.TRUE;
 

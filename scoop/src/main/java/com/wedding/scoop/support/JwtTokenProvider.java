@@ -1,20 +1,15 @@
 package com.wedding.scoop.support;
 
-import com.wedding.scoop.exception.JwtExpiredException;
-import com.wedding.scoop.exception.JwtNotValidException;
+import com.wedding.scoop.exception.unauthorized.JwtExpiredException;
+import com.wedding.scoop.exception.unauthorized.JwtNotValidException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @Slf4j
