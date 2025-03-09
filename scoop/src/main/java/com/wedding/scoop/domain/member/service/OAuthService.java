@@ -17,7 +17,7 @@ public class OAuthService {
     private final AppleOAuthFeignClient appleOAuthFeignClient;
 
     public KakaoTokenResponse getKakaoOauthAccessToken(String authorizationCode, String redirectUri) {
-        String clientId = "YOUR_CLIENT_ID";
+        String clientId = "4edaa8c9db64c1fd74b9f013e78d3eec";
 
         return kakaoOAuthFeignClient.getAccessToken("authorization_code", clientId, redirectUri, authorizationCode);
     }
@@ -27,7 +27,7 @@ public class OAuthService {
     }
 
     public AppleTokenResponse getAppleOauthAccessToken(String authorizationCode, String redirectUri) {
-        String clientId = "YOUR_CLIENT_ID";
+        String clientId = "001624.1f156f5e36d94a169b0c426e8b414488.0122";
 
         return appleOAuthFeignClient.getAccessToken("authorization_code", clientId, redirectUri, authorizationCode);
     }
