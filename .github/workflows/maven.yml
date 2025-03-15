@@ -55,18 +55,18 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-                  # 기존 auth-api 컨테이너 중지 및 삭제
-                  sudo docker stop auth-api || true
-                  sudo docker rm auth-api || true
+#                  # 기존 auth-api 컨테이너 중지 및 삭제
+#                  sudo docker stop auth-api || true
+#                  sudo docker rm auth-api || true
+#
+#                  # 최신 Docker 이미지 가져오기
+#                  sudo docker pull ${{ secrets.DOCKER_USERNAME }}/auth-api
                   
-                  # 최신 Docker 이미지 가져오기
-                  sudo docker pull ${{ secrets.DOCKER_USERNAME }}/auth-api
-                  
-                  # 새 auth-api 컨테이너 실행
-                  sudo docker run -d --name auth-api \
-                  -p 8080:8080 \
-                  --restart always \
-                  ${{ secrets.DOCKER_USERNAME }}/auth-api
+#                  # 새 auth-api 컨테이너 실행
+#                  sudo docker run -d --name auth-api \
+#                  -p 8080:8080 \
+#                  --restart always \
+#                  ${{ secrets.DOCKER_USERNAME }}/auth-api
                   
                   # 기존 scoop-api 컨테이너 중지 및 삭제
                   sudo docker stop scoop-api || true

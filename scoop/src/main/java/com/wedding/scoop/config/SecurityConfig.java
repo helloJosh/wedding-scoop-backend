@@ -37,12 +37,13 @@ public class SecurityConfig {
         http
                 .httpBasic(AbstractHttpConfigurer::disable);
 
-        http.authorizeHttpRequests(
-                authorize -> authorize
-                        .requestMatchers("/v1/api/member/*").permitAll()
-                        .requestMatchers("/docs","/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                        .anyRequest().authenticated()
-        );
+        http    .requiresChannel(channel -> channel.anyRequest().requiresSecure())
+                .authorizeHttpRequests(
+                    authorize -> authorize
+                            .requestMatchers("/v1/api/member/*").permitAll()
+                            //.requestMatchers("/docs","/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                            .anyRequest().authenticated()
+                );
 
         // JWT 필터 추가
         http.addFilterBefore(
