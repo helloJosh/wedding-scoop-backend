@@ -47,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (token != null && jwtTokenProvider.validateAccessToken(token)) {
             String memberId = jwtTokenProvider.getMemberId(token);
 
-            Member member = memberRepository.findById(memberId).orElseThrow(
+            Member member = memberRepository.findById(Long.valueOf(memberId)).orElseThrow(
                     () -> new MemberNotFoundException(memberId + "not member found")
             );
 

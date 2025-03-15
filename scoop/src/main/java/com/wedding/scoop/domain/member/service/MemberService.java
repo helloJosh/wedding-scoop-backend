@@ -1,5 +1,6 @@
 package com.wedding.scoop.domain.member.service;
 
+import com.wedding.scoop.domain.member.dto.request.PostSignInRequest;
 import com.wedding.scoop.domain.member.dto.response.AppleTokenResponse;
 import com.wedding.scoop.domain.member.dto.response.KakaoTokenResponse;
 import com.wedding.scoop.domain.member.dto.response.KakaoUserInfoResponse;
@@ -12,6 +13,8 @@ import com.wedding.scoop.domain.member.repository.AuthMemberRepository;
 import com.wedding.scoop.domain.member.repository.AuthRepository;
 import com.wedding.scoop.domain.member.repository.MemberRepository;
 import com.wedding.scoop.domain.member.repository.OauthRepository;
+import com.wedding.scoop.exception.notfound.MemberNotFoundException;
+import com.wedding.scoop.exception.notfound.OAuthNotFoundException;
 import com.wedding.scoop.support.JwtTokenProvider;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
@@ -30,60 +33,56 @@ public class MemberService {
     private final AuthRepository authRepository;
     private final AuthMemberRepository authMemberRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final OAuthService oAuthService;
 
-    public String loginWithSignIn(String oauthCode,String redirectUri, String provider) {
-        if (provider.equals("kakao")) {
-            KakaoTokenResponse accessTokenInfo = oAuthService.getKakaoOauthAccessToken(oauthCode, redirectUri);
-            KakaoUserInfoResponse memberInfo = oAuthService.getKakaoUserInfo(accessTokenInfo.getAccessToken());
+    public String login(String userId, Provider provider) {
+        Oauth oauth = oauthRepository.findOauthByProvider(provider)
+                .orElseThrow(() ->
+                    new OAuthNotFoundException("Provider Not Found" + provider)
+                );
 
-            String name = memberInfo.getKakaoAccount().getName();
-            String email = memberInfo.getKakaoAccount().getEmail();
-            String uuid = memberInfo.getId().toString();
+        Member member = memberRepository.findByUuidAndOauth(userId, oauth)
+                .orElseThrow(() ->
+                        new MemberNotFoundException("Member Not Found :" + userId)
+                );
 
-            //uuid 아이디 찾기 맴버 찾고 회원가입 혹은 바로 로그인
-            Oauth oauth = new Oauth(Provider.valueOf(provider));
-            Member member = memberRepository.findByUuidAndOauth(uuid, oauth)
-                    .orElse( new Member(name, email, oauth));
-            member.setLatestLoginAt(LocalDateTime.now());
 
-            Auth auth = authRepository.findAuthByType("member")
-                    .orElse(new Auth("member"));
-            AuthMember authMember = new AuthMember(member, auth);
+        Auth auth = authRepository.findAuthByType("member")
+                .orElse(new Auth("member"));
+        AuthMember authMember = new AuthMember(member, auth);
 
-            memberRepository.save(member);
-            authRepository.save(auth);
-            oauthRepository.save(oauth);
-            authMemberRepository.save(authMember);
+        authRepository.save(auth);
+        oauthRepository.save(oauth);
+        authMemberRepository.save(authMember);
 
-            return jwtTokenProvider.generateAccessToken(member.getId());
-        } else if (provider.equals("apple")) {
+        return jwtTokenProvider.generateAccessToken(String.valueOf(member.getId()));
+    }
 
-            AppleTokenResponse accessTokenInfo = oAuthService.getAppleOauthAccessToken(oauthCode, redirectUri);
+    public String signIn(PostSignInRequest postSignInRequest){
+        Oauth oauth = oauthRepository.findOauthByProvider(postSignInRequest.getProvider())
+                .orElseGet(() -> {
+                    Oauth newOauth = new Oauth(postSignInRequest.getProvider());
+                    oauthRepository.save(newOauth);
+                    return newOauth;
+                });
 
-            Map<String, Object> memberInfo = oAuthService.getAppleUserInfo(accessTokenInfo.getAccessToken());
+        Member member = memberRepository.findByUuidAndOauth(postSignInRequest.getUserId(), oauth)
+                .orElseGet(() -> {
+                    Member newMember = new Member(postSignInRequest.getUserId(), oauth);
+                    memberRepository.save(newMember);
+                    return newMember;
+                });
 
-            String name = null;
-            String email = null;
-            String uuid = (String) memberInfo.get("sub");
+        member.setName(postSignInRequest.getName());
+        member.setAgeRange(postSignInRequest.getAgeRange());
 
-            //uuid 아이디 찾기 맴버 찾고 회원가입 혹은 바로 로그인
-            Oauth oauth = new Oauth(Provider.valueOf(provider));
-            Member member = memberRepository.findByUuidAndOauth(uuid, oauth)
-                    .orElse( new Member(name, email, oauth));
-            member.setLatestLoginAt(LocalDateTime.now());
+        Auth auth = authRepository.findAuthByType("member")
+                .orElse(new Auth("member"));
+        AuthMember authMember = new AuthMember(member, auth);
 
-            Auth auth = authRepository.findAuthByType("member")
-                    .orElse(new Auth("member"));
-            AuthMember authMember = new AuthMember(member, auth);
+        authMemberRepository.save(authMember);
+        memberRepository.save(member);
 
-            memberRepository.save(member);
-            authRepository.save(auth);
-            oauthRepository.save(oauth);
-            authMemberRepository.save(authMember);
 
-            return jwtTokenProvider.generateAccessToken(member.getId());
-        }
-        return null;
+        return jwtTokenProvider.generateAccessToken(String.valueOf(member.getId()));
     }
 }

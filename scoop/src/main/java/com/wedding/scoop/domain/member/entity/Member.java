@@ -18,9 +18,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Member {
     @Id
-    @UuidGenerator
-    @GeneratedValue
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(length = 100)
     @Setter
@@ -32,6 +31,7 @@ public class Member {
 
     private String email;
     private String uuid;
+
     @Setter
     private String ageRange;
 
@@ -48,12 +48,11 @@ public class Member {
     private LocalDateTime latestLoginAt;
     private Boolean active = Boolean.TRUE;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Oauth oauth;
 
-    public Member(String email, String name, Oauth oauth) {
-        this.email = email;
-        this.name = name;
+    public Member(String uuid, Oauth oauth) {
+        this.uuid = uuid;
         this.oauth = oauth;
     }
 }

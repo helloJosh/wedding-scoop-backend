@@ -18,8 +18,6 @@ public class VendorTag {
     @UuidGenerator
     private String id;
 
-
-
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp

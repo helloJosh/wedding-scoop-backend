@@ -23,8 +23,8 @@ public interface MemberController {
     ApiResponse<GetValidationResponse> duplicationCheck(@RequestParam("nickname") String nickname);
 
     @Operation(
-            summary = " 첫 회원가입, 로그인 API",
-            description = "Oauth 발급 코드, 라다이렉트 URI, Provider(ex: kakao, apple)값을 받아서 자체 JWT 토큰 발급(1일)"
+            summary = "로그인 API",
+            description = "Oauth 발급 UserId를 가지고 헤더를 통해 JWT 토큰 반환"
     )
     @PostMapping("/login")
     ApiResponse<Void> login(@Valid @RequestBody PostLoginRequest postLoginRequest,
@@ -33,10 +33,10 @@ public interface MemberController {
 
     @Operation(
             summary = "회원가입 API",
-            description = "연령, 별명을 받아서 최종 회원가입 완료"
+            description = "연령, 별명을 받아서 회원가입 완료"
     )
     @PostMapping("/signIn")
     ApiResponse<Void> signIn(@Valid @RequestBody PostSignInRequest postSignInRequest,
                              BindingResult bindingResult,
-                             @RequestHeader("Authorization") String jwtToken);
+                             HttpServletResponse response);
 }

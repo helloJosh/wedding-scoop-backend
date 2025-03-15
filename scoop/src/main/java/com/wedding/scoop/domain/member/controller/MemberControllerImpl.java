@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MemberControllerImpl implements MemberController{
     private final MemberService memberService;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final MemberRepository memberRepository;
     private final ValidationService validationService;
 
     @Override
@@ -36,26 +34,26 @@ public class MemberControllerImpl implements MemberController{
     public ApiResponse<Void> login(PostLoginRequest postLoginRequest,
                                    BindingResult bindingResult,
                                    HttpServletResponse response) {
-        String token = memberService.loginWithSignIn(
-                postLoginRequest.getOauthCode(),
-                postLoginRequest.getRedirectUri(),
+
+        String jwtToken = memberService.login(
+                postLoginRequest.getUserId(),
                 postLoginRequest.getProvider()
         );
 
-        response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+        response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken);
 
         return ApiResponse.success("login success");
     }
 
     @Override
-    public ApiResponse<Void> signIn(PostSignInRequest postSignInRequest, BindingResult bindingResult, String jwtToken) {
-        String memberId = jwtTokenProvider.getMemberId(jwtToken);
-        Member member = memberRepository.findById(memberId).orElseThrow();
+    public ApiResponse<Void> signIn(
+            PostSignInRequest postSignInRequest,
+            BindingResult bindingResult,
+            HttpServletResponse response) {
 
-        member.setName(postSignInRequest.getName());
-        member.setAgeRange(postSignInRequest.getAgeRange());
+        String jwtToken = memberService.signIn(postSignInRequest);
 
-        memberRepository.save(member);
+        response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken);
 
         return ApiResponse.success("sign in success");
     }
