@@ -3,7 +3,6 @@ package com.wedding.scoop.filter;
 import com.wedding.scoop.domain.member.entity.AuthMember;
 import com.wedding.scoop.domain.member.entity.Member;
 import com.wedding.scoop.domain.member.repository.AuthMemberRepository;
-import com.wedding.scoop.domain.member.repository.AuthRepository;
 import com.wedding.scoop.domain.member.repository.MemberRepository;
 import com.wedding.scoop.exception.notfound.MemberNotFoundException;
 import com.wedding.scoop.support.JwtTokenProvider;

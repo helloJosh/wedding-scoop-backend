@@ -1,8 +1,6 @@
 package com.wedding.scoop.domain.vendor.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,13 +14,17 @@ import java.time.LocalDateTime;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Image {
+public class VendorOption {
     @Id
     @GeneratedValue
     @UuidGenerator
     private String id;
 
-    private String objectName;
+    private String detailName;
+    private Integer price;
+    private Integer pricePerCount;
+    private Integer defaultCount;
+
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -32,7 +34,9 @@ public class Image {
 
     private Boolean active = Boolean.TRUE;
 
-    public Image(String objectName) {
-        this.objectName = objectName;
-    }
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Vendor vendor;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Option option;
 }

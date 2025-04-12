@@ -3,10 +3,9 @@ package com.wedding.scoop.domain.member.controller;
 import com.wedding.scoop.common.ApiResponse;
 import com.wedding.scoop.domain.member.dto.request.PostLoginRequest;
 import com.wedding.scoop.domain.member.dto.request.PostSignInRequest;
-import com.wedding.scoop.domain.member.dto.response.GetValidationResponse;
+import com.wedding.scoop.domain.member.dto.response.GetNicknameResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
@@ -19,8 +18,8 @@ public interface MemberController {
             summary = "별명 중복확인 API",
             description = "요청한 별명을 중복 검사후 추천 이름 반환"
     )
-    @GetMapping("/validation")
-    ApiResponse<GetValidationResponse> duplicationCheck(@RequestParam("nickname") String nickname);
+    @GetMapping("/nickname")
+    ApiResponse<GetNicknameResponse> generateNickname();
 
     @Operation(
             summary = "로그인 API",

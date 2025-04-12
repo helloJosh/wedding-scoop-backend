@@ -3,13 +3,9 @@ package com.wedding.scoop.domain.member.controller;
 import com.wedding.scoop.common.ApiResponse;
 import com.wedding.scoop.domain.member.dto.request.PostLoginRequest;
 import com.wedding.scoop.domain.member.dto.request.PostSignInRequest;
-import com.wedding.scoop.domain.member.dto.response.GetValidationResponse;
-import com.wedding.scoop.domain.member.entity.Member;
-import com.wedding.scoop.domain.member.repository.MemberRepository;
+import com.wedding.scoop.domain.member.dto.response.GetNicknameResponse;
 import com.wedding.scoop.domain.member.service.MemberService;
-import com.wedding.scoop.domain.member.service.ValidationService;
-import com.wedding.scoop.support.JwtTokenProvider;
-import jakarta.servlet.http.HttpServletRequest;
+import com.wedding.scoop.domain.member.service.NicknameService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,22 +18,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MemberControllerImpl implements MemberController{
     private final MemberService memberService;
-    private final ValidationService validationService;
+    private final NicknameService nicknameService;
 
+    ///  GET /v1/api/member/nickname
     @Override
-    public ApiResponse<GetValidationResponse> duplicationCheck(String nickname) {
+    public ApiResponse<GetNicknameResponse> generateNickname() {
+        log.info("nickname request");
 
-        return ApiResponse.success(validationService.validate(nickname), "check duplication success");
+        return ApiResponse.success(
+                nicknameService.generateNickname(),
+                "check duplication success"
+        );
     }
 
+    ///  POST /v1/api/member/login
     @Override
     public ApiResponse<Void> login(PostLoginRequest postLoginRequest,
                                    BindingResult bindingResult,
                                    HttpServletResponse response) {
+        log.info("member login request");
 
         String jwtToken = memberService.login(
-                postLoginRequest.getUserId(),
-                postLoginRequest.getProvider()
+                postLoginRequest.getUserId()
         );
 
         response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken);
@@ -45,11 +47,14 @@ public class MemberControllerImpl implements MemberController{
         return ApiResponse.success("login success");
     }
 
+    ///  POST /v1/api/member/signIn
     @Override
     public ApiResponse<Void> signIn(
             PostSignInRequest postSignInRequest,
             BindingResult bindingResult,
             HttpServletResponse response) {
+        log.info("member signIn request");
+
 
         String jwtToken = memberService.signIn(postSignInRequest);
 

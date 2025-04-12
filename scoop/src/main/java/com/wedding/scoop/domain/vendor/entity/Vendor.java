@@ -1,16 +1,23 @@
 package com.wedding.scoop.domain.vendor.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.wedding.scoop.domain.vendor.entity.enums.VendorTypes;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 
+@Data
 @Entity
+@Table(
+        uniqueConstraints = @UniqueConstraint(columnNames = {"name"})
+)
+@AllArgsConstructor
+@NoArgsConstructor
 public class Vendor {
     @Id
     @GeneratedValue
@@ -18,7 +25,6 @@ public class Vendor {
     private String id;
 
     private String name;
-    private Integer capacity;
     private String url;
 
     @Column(length = 20)
@@ -27,8 +33,11 @@ public class Vendor {
     private String kakaoUrl;
     private String igUrl;
 
-    private Double latitude;
-    private Double longitude;
+    @Column(columnDefinition = "TEXT")
+    private String address;
+
+    @Enumerated(EnumType.STRING)
+    private VendorTypes vendorTypes;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

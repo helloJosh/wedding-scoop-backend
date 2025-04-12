@@ -1,5 +1,6 @@
 package com.wedding.scoop.domain.member.entity;
 
+import com.wedding.scoop.domain.member.entity.enums.AgeRange;
 import com.wedding.scoop.domain.member.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,7 +34,7 @@ public class Member {
     private String uuid;
 
     @Setter
-    private String ageRange;
+    private AgeRange ageRange;
 
     private Role role;
     private LocalDateTime expectedWeddingDate;
@@ -48,7 +49,7 @@ public class Member {
     private LocalDateTime latestLoginAt;
     private Boolean active = Boolean.TRUE;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Oauth oauth;
 
     public Member(String uuid, Oauth oauth) {

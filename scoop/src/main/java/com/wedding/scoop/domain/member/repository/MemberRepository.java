@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    Optional<Member> findByUuidAndOauth(String uuid, Oauth oauth);
+    Optional<Member> findByUuid(String uuid);
 
-    @Query("SELECT m.nickname FROM Member m")
-    List<String> findAllNicknames();
 }

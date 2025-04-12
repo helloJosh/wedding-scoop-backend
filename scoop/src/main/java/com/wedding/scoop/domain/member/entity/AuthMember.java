@@ -16,10 +16,10 @@ public class AuthMember {
     @UuidGenerator
     private String id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Member member;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Auth auth;
 
     public AuthMember(Member member, Auth auth) {

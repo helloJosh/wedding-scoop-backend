@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class GetValidationResponse {
+public class GetNicknameResponse {
     Boolean valid;
     String recommendedName;
 }

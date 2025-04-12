@@ -2,6 +2,7 @@ package com.wedding.scoop.exception;
 
 import com.wedding.scoop.common.ApiResponse;
 import com.wedding.scoop.exception.badrequest.InvalidOAuthProviderException;
+import com.wedding.scoop.exception.conflict.MemberAlreadyExistException;
 import com.wedding.scoop.exception.notfound.MemberNotFoundException;
 import com.wedding.scoop.exception.unauthorized.JwtExpiredException;
 import com.wedding.scoop.exception.unauthorized.JwtNotValidException;
@@ -93,6 +94,21 @@ public class RestExceptionHandler {
                 "bad request error"
         );
     }
+
+    @ExceptionHandler({
+            MemberAlreadyExistException.class
+    })
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiResponse<ErrorResponseForm> conflictHandler(Exception ex, Model model) {
+        return ApiResponse.badRequestFail(new ApiResponse.Body<>(ErrorResponseForm.builder()
+                        .title(ex.getMessage())
+                        .status(HttpStatus.CONFLICT.value())
+                        .timestamp(ZonedDateTime.now().toString())
+                        .build()),
+                "conflict error"
+        );
+    }
+
 
 
 

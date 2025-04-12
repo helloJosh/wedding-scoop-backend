@@ -57,7 +57,7 @@ public class SecurityConfig {
         http    .requiresChannel(channel -> channel.anyRequest().requiresSecure())
                 .authorizeHttpRequests(
                     authorize -> authorize
-                        .requestMatchers("/v1/api/member/*").permitAll()
+                        .requestMatchers("/v1/api/member/**").permitAll()
                         //.requestMatchers("/docs","/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated()
                 );

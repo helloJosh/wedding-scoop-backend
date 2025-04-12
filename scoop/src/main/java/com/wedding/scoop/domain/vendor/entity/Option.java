@@ -17,10 +17,10 @@ import java.time.LocalDateTime;
 )
 @AllArgsConstructor
 @NoArgsConstructor
-public class Category {
+public class Option {
     @Id
-    @GeneratedValue
     @UuidGenerator
+    @GeneratedValue
     private String id;
 
     private String name;

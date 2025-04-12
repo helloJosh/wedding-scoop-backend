@@ -1,22 +1,28 @@
 package com.wedding.scoop.domain.vendor.entity;
 
-import com.wedding.scoop.domain.member.entity.Member;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import com.wedding.scoop.domain.vendor.entity.enums.VendorTypes;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 
+@Data
 @Entity
-public class VendorTag {
+@AllArgsConstructor
+@NoArgsConstructor
+public class VendorType {
     @Id
     @GeneratedValue
     @UuidGenerator
     private String id;
+
+    private String detailName;
+    private Double price;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -26,9 +32,9 @@ public class VendorTag {
 
     private Boolean active = Boolean.TRUE;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Vendor vendor;
 
-    @ManyToOne
-    private Member member;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Type type;
 }

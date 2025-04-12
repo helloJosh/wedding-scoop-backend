@@ -1,5 +1,6 @@
 package com.wedding.scoop.domain.member.entity;
 
+import com.wedding.scoop.domain.member.entity.enums.AuthType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -19,9 +20,9 @@ public class Auth {
     @UuidGenerator
     private String id;
 
-    private String type;
+    private AuthType type;
 
-    public Auth(String type) {
+    public Auth(AuthType type) {
         this.type = type;
     }
 }
