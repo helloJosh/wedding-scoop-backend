@@ -30,15 +30,7 @@ spring:
 
 server:
   shutdown: graceful
-  port: 443
-  ssl:
-    enabled: true
-    key-store: classpath:keystore.p12
-    key-store-password: supermk0  # keytool에서 입력한 비밀번호
-    key-store-type: PKCS12
-    key-alias: myssl
-  http2:
-    enabled: true
+  port: 8443
 
 logging:
   level:

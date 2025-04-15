@@ -54,7 +54,7 @@ public class SecurityConfig {
         http
                 .httpBasic(AbstractHttpConfigurer::disable);
 
-        http    .requiresChannel(channel -> channel.anyRequest().requiresSecure())
+        http    //.requiresChannel(channel -> channel.anyRequest().requiresSecure())
                 .authorizeHttpRequests(
                     authorize -> authorize
                         .requestMatchers("/v1/api/member/**").permitAll()
