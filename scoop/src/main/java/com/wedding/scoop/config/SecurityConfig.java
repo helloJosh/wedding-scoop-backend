@@ -62,7 +62,6 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 );
 
-        // JWT 필터 추가
         http.addFilterBefore(
                 new JwtAuthenticationFilter(jwtTokenProvider, memberRepository, authMemberRepository),
                 UsernamePasswordAuthenticationFilter.class);
