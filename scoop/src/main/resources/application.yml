@@ -1,3 +1,9 @@
+server:
+  shutdown: graceful
+  port: 8443
+  ssl:
+    enabled: false
+
 spring:
   data:
     elasticsearch:
@@ -28,9 +34,6 @@ spring:
   application:
     name: scoop
 
-server:
-  shutdown: graceful
-  port: 8443
 
 logging:
   level:
