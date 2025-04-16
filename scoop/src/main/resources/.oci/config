@@ -1,0 +1,6 @@
+[DEFAULT]
+user=ocid1.user.oc1..aaaaaaaaodlohsupnfxzxc7qu3n4dd2jztbrrigocivmtbphk7hh6nbj6e4a
+fingerprint=36:2a:52:b7:12:d7:aa:b7:d9:f0:76:9d:d3:67:e3:7d
+key_file=/Users/administrator/.oci/scoop_wedding.pem
+tenancy=ocid1.tenancy.oc1..aaaaaaaauammtt6n7xohbltjjniqurdugkwbhwenmg32ldbg3jw2puwmugia
+region=ap-chuncheon-1
