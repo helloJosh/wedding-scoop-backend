@@ -1,4 +1,4 @@
 FROM eclipse-temurin:21-jre
 WORKDIR /app
-COPY ./target/*.jar scoop.jar
-ENTRYPOINT ["java","-Dspring.profiles.active=prod","-jar","/app/scoop.jar"]
+COPY ./target/scoop.jar scoop.jar
+ENTRYPOINT ["java", "-jar", "/app/scoop.jar", "--spring.profiles.active=prod"]
