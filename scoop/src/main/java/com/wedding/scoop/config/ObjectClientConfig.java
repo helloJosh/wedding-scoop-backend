@@ -8,30 +8,38 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.*;
+import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.Objects;
 
 @Configuration
 public class ObjectClientConfig {
     @Bean
     public ObjectStorage objectStorage() throws Exception {
-        // 클래스패스에 있는 `.oci/config` 리소스를 읽어서 임시 파일로 저장
-        InputStream configInputStream = getClass().getClassLoader().getResourceAsStream(".oci/config");
+// .oci 디렉토리를 resources에서 가져오기
+        Path tempDir = Files.createTempDirectory("oci-config");
 
-        if (configInputStream == null) {
-            throw new FileNotFoundException("OCI config file not found in resources/.oci/config");
+        // 리스트에 담긴 필요한 파일들
+        List<String> filenames = List.of("config", "scoop_wedding.pem");
+
+        for (String filename : filenames) {
+            try (InputStream in = getClass().getClassLoader().getResourceAsStream(".oci/" + filename)) {
+                if (in == null) {
+                    throw new FileNotFoundException("Missing file: " + filename);
+                }
+
+                Path target = tempDir.resolve(filename);
+                Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
+            }
         }
 
-        // 임시 파일 생성
-        File tempConfigFile = File.createTempFile("oci-config", ".tmp");
-        tempConfigFile.deleteOnExit();
-
-        try (OutputStream out = new FileOutputStream(tempConfigFile)) {
-            configInputStream.transferTo(out);
-        }
-
-        // 생성된 임시 파일 경로로 ConfigFileAuthenticationDetailsProvider 초기화
+        // config 파일을 기반으로 provider 생성
+        Path configPath = tempDir.resolve("config");
         ConfigFileAuthenticationDetailsProvider provider =
-                new ConfigFileAuthenticationDetailsProvider(tempConfigFile.getAbsolutePath(), "DEFAULT");
+                new ConfigFileAuthenticationDetailsProvider(configPath.toString(), "DEFAULT");
 
         return new ObjectStorageClient(provider);
     }
