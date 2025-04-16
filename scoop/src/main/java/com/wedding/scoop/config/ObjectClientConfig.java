@@ -19,25 +19,32 @@ import java.util.Objects;
 public class ObjectClientConfig {
     @Bean
     public ObjectStorage objectStorage() throws Exception {
-// .oci 디렉토리를 resources에서 가져오기
+        // 1. 리소스 안에 있는 `.oci` 폴더를 임시 디렉토리로 복사
         Path tempDir = Files.createTempDirectory("oci-config");
 
-        // 리스트에 담긴 필요한 파일들
-        List<String> filenames = List.of("config", "scoop_wedding.pem");
+        // 복사할 파일 목록
+        String[] files = {"config", "scoop_wedding.pem"};
 
-        for (String filename : filenames) {
-            try (InputStream in = getClass().getClassLoader().getResourceAsStream(".oci/" + filename)) {
+        for (String file : files) {
+            try (InputStream in = getClass().getClassLoader().getResourceAsStream(".oci/" + file)) {
                 if (in == null) {
-                    throw new FileNotFoundException("Missing file: " + filename);
+                    throw new FileNotFoundException("Missing file: " + file);
                 }
-
-                Path target = tempDir.resolve(filename);
-                Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(in, tempDir.resolve(file), StandardCopyOption.REPLACE_EXISTING);
             }
         }
 
-        // config 파일을 기반으로 provider 생성
+        // 2. config 내용 수정: key_file 경로를 절대경로로 바꿔줌
         Path configPath = tempDir.resolve("config");
+        Path privateKeyPath = tempDir.resolve("scoop_wedding.pem");
+
+        List<String> lines = Files.readAllLines(configPath);
+        List<String> modified = lines.stream()
+                .map(line -> line.startsWith("key_file=") ? "key_file=" + privateKeyPath.toAbsolutePath() : line)
+                .toList();
+        Files.write(configPath, modified);
+
+        // 3. provider 생성
         ConfigFileAuthenticationDetailsProvider provider =
                 new ConfigFileAuthenticationDetailsProvider(configPath.toString(), "DEFAULT");
 
