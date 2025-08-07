@@ -4,9 +4,9 @@ spring:
       on-profile: dev
 
   datasource:
-    url: jdbc:postgresql://woobeee.com:54320/postgres
-    username: root
-    password: 123456789
+    url: 
+    username: 
+    password: 
     driver-class-name: org.postgresql.Driver
     dbcp2:
       initial-size: 10               # 초기 연결 수
