@@ -4,9 +4,9 @@ spring:
       on-profile: prod
 
   datasource:
-    url: jdbc:postgresql://woobeee.com:54320/postgres
-    username: root
-    password: 123456789
+    url: 
+    username: 
+    password: 
     driver-class-name: org.postgresql.Driver
     type: org.apache.commons.dbcp2.BasicDataSource
     dbcp2:
