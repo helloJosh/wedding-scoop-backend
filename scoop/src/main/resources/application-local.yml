@@ -4,9 +4,9 @@ spring:
       on-profile: local
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: root
-    password: 123456789
+    url: 
+    username: 
+    password: 
     driver-class-name: org.postgresql.Driver
     type: org.apache.commons.dbcp2.BasicDataSource
     dbcp2:
